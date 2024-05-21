@@ -56,38 +56,39 @@ def motor_control(pwm, INA, INB, speed, stat) -> None:
         GPIO.output(INA, LOW)
         GPIO.output(INB, LOW)
         
-# 모터 제어함수 간단하게 사용하기 위해 한번더 래핑(감쌈)
+# 모터 제어함수 간단하게 사용하기 위해 한 번 더 래핑
 def set_motor(ch, speed, stat):
     if ch == CH1:
-        #pwmA는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
+        # pwmA는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
         motor_control(pwmA, IN1, IN2, speed, stat)
     else:
-        #pwmB는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
+        # pwmB는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
         motor_control(pwmB, IN3, IN4, speed, stat)
   
-GPIO.setmode(GPIO.BCM)
-pwmA = set_pin(ENA, IN1, IN2)
-pwmB = set_pin(ENB, IN3, IN4)
+if __name__ == "__main__":
+    GPIO.setmode(GPIO.BCM)
+    pwmA = set_pin(ENA, IN1, IN2)
+    pwmB = set_pin(ENB, IN3, IN4)
 
-# 앞으로 80프로 속도로
-set_motor(CH1, 80, FORWARD)
-set_motor(CH2, 80, FORWARD)
-#5초 대기
-sleep(5)
+    # 앞으로 80프로 속도로
+    set_motor(CH1, 80, FORWARD)
+    set_motor(CH2, 80, FORWARD)
+    #5초 대기
+    sleep(5)
 
-# 뒤로 40프로 속도로
-set_motor(CH1, 40, BACKWORD)
-set_motor(CH2, 40, BACKWORD)
-sleep(5)
+    # 뒤로 40프로 속도로
+    set_motor(CH1, 40, BACKWORD)
+    set_motor(CH2, 40, BACKWORD)
+    sleep(5)
 
-# 뒤로 100프로 속도로
-set_motor(CH1, 100, BACKWORD)
-set_motor(CH2, 100, BACKWORD)
-sleep(5)
+    # 뒤로 100프로 속도로
+    set_motor(CH1, 100, BACKWORD)
+    set_motor(CH2, 100, BACKWORD)
+    sleep(5)
 
-#정지 
-set_motor(CH1, 80, STOP)
-set_motor(CH2, 80, STOP)
+    #정지 
+    set_motor(CH1, 80, STOP)
+    set_motor(CH2, 80, STOP)
 
-# 종료
-GPIO.cleanup()
+    # 종료
+    GPIO.cleanup()
