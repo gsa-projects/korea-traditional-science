@@ -3,24 +3,24 @@ import cv2
 import numpy as np
 import RPi.GPIO as GPIO
 
-# 모터 상태
+#  
 STOP  = 0
 FORWARD  = 1
 BACKWORD = 2
 
-# 모터 채널
+#  
 CH1 = 0
 CH2 = 1
 
-# PIN 입출력 설정
+# PIN  
 OUTPUT = 1
 INPUT = 0
 
-# PIN 설정
+# PIN 
 HIGH = 1
 LOW = 0
 
-# 실제 핀 정의
+#   
 #PWM PIN
 ENA = 26  #37 pin
 ENB = 0   #27 pin
@@ -36,10 +36,10 @@ def set_pin(EN, INA, INB) -> GPIO.PWM:
     GPIO.setup(INA, GPIO.OUT)
     GPIO.setup(INB, GPIO.OUT)
     
-    # 100khz 로 PWM 동작 시킴 
+    # 100khz  PWM   
     pwm = GPIO.PWM(EN, 100) 
     
-    # 우선 PWM 멈춤.   
+    #  PWM .   
     pwm.start(0) 
     return pwm
 
@@ -56,15 +56,16 @@ def motor_control(pwm, INA, INB, speed, stat) -> None:
         GPIO.output(INA, LOW)
         GPIO.output(INB, LOW)
 
+GPIO.setmode(GPIO.BCM)
 pwmA = set_pin(ENA, IN1, IN2)
 pwmB = set_pin(ENB, IN3, IN4)
 
 def set_motor(ch, speed, stat):
     if ch == CH1:
-        # pwmA는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
+        # pwmA    pwm    .
         motor_control(pwmA, IN1, IN2, speed, stat)
     else:
-        # pwmB는 핀 설정 후 pwm 핸들을 리턴 받은 값이다.
+        # pwmB    pwm    .
         motor_control(pwmB, IN3, IN4, speed, stat)
 
 face_cascade = cv2.CascadeClassifier('cascades/haarcascade_frontalface_default.xml')
@@ -94,11 +95,17 @@ while True:
         center_x = x + w // 2
         
         if center_x < frame_width / 3:
-            set_motor(CH1, 80, FORWARD)
+            set_motor(CH1, 30, FORWARD)
             print('left')
         elif center_x > 2 * frame_width / 3:
-            set_motor(CH1, 80, BACKWORD)
+            set_motor(CH1, 30, BACKWORD)
             print('right')
+        else:
+            set_motor(CH1, 0, FORWARD)
+            print('middle')
+    else:
+        set_motor(CH1, 0, FORWARD)
+        print('empty')
 
     cv2.imshow('Faces', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):

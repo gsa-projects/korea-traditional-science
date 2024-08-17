@@ -69,20 +69,18 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     pwmA = set_pin(ENA, IN1, IN2)
     pwmB = set_pin(ENB, IN3, IN4)
-
-    set_motor(CH1, 80, FORWARD)
-    set_motor(CH2, 80, FORWARD)
-    sleep(5)
-
-    set_motor(CH1, 40, BACKWORD)
-    set_motor(CH2, 40, BACKWORD)
-    sleep(5)
-
-    set_motor(CH1, 100, BACKWORD)
-    set_motor(CH2, 100, BACKWORD)
-    sleep(5)
-
-    set_motor(CH1, 80, STOP)
-    set_motor(CH2, 80, STOP)
-
-    GPIO.cleanup()
+    
+    try:
+        while True:
+            n = int(input('angle: '))
+            
+            if n > 0:
+                set_motor(CH1, 10, FORWARD)
+                set_motor(CH2, 10, FORWARD)
+            else:
+                set_motor(CH1, 10, BACKWORD)
+                set_motor(CH2, 10, BACKWORD)
+            sleep(2)
+            pwmA.ChangeDutyCycle(0)
+    except:
+        GPIO.cleanup()
